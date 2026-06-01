@@ -1,8 +1,10 @@
-export default function Channel({ channel, name, participants }) {
+export default function Channel({id, name, participants }) {
 	return (
-		<div className="Channel-item" key={channel.id}>
+		<div className="Channel-item" key={id}>
 			<div>{name}</div>
-      <span>{participants}</span>
+			(participants.map{(participant) => {
+				<span>{participant}</span>;
+			}})
 		</div>
 	);
 }
