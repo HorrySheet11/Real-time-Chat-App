@@ -8,6 +8,16 @@ const io = require('socket.io')(http, {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.get('/getChannels', (req,res)=>{
+  res.send({
+    channels: STATIC_CHANNELS
+  })
+})
+
 http.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });

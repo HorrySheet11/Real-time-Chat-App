@@ -3,7 +3,6 @@ import socketClient from "socket.io-client";
 import './App.css';
 
 const server = "http://localhost:3000";
-// FIXME: no cors
 
 function App() {
   const socket = socketClient(server);
