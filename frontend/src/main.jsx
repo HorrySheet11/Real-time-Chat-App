@@ -5,7 +5,7 @@ import App from './App.jsx'
 import Chat from './components/Chat.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <Chat />
-  </StrictMode>,
+  // </StrictMode>
 )

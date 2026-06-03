@@ -1,6 +1,6 @@
-import Message from "./Message";
+import Message from "./Message.jsx";
 
-export default function MessagesPanel(){
+export default function MessagesPanel({channel}){
 
   return(
     <div className="messages-panel">

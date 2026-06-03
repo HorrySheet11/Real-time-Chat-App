@@ -1,12 +1,16 @@
-import Channel from "./Channel";
+import { useEffect, useState } from "react";
+import Channel from "./Channel.jsx";
 
-export default function ChannelList(channel) {
+export default function ChannelList({channel}) {
+	useEffect(() => {
+		console.log(channel);
+	},[]);
 	return (
 		<div className="ChannelList">
-			{channel?.map((channel) => (
+			{channel.map(channel => (
 				<Channel
 					key={channel.id}
-					id={id}
+					id={channel.id}
 					name={channel.name}
 					participants={channel.participants}
 				/>

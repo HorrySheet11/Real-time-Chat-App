@@ -1,5 +1,5 @@
 
-export default function Message(senderName, text) {
+export default function Message({senderName, text}) {
   return (
     <div className="message-item">
       <div><b>{senderName}:</b></div>

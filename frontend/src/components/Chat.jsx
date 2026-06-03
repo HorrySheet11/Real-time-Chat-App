@@ -1,29 +1,33 @@
 import { useEffect, useState } from "react";
-import ChannelList from "./ChannelList";
+import ChannelList from "./ChannelList.jsx";
 import "./chat.css";
-import MessagesPanel from "./MessagesPanel";
+import MessagesPanel from "./MessagesPanel.jsx";
 
 export default function Chat() {
 	const [channels, setChannels] = useState([]);
 
 	useEffect(() => {
-		setChannels(...channels, {
-			id: 1,
-			name: first,
-			participants: 10,
-		});
+		console.log("chat loaded");
+		setChannels((channel) => [
+			...channel,
+			{
+				id: 1,
+				name: "first",
+				participants: 10,
+			},
+		]);
 
-		async function getChannels() {
-			await axios.get("http://localhost:3000/getChannels").then((response) => {
-				setChannels(response.data.channels);
-			});
-		}
-		getChannels();
+		// async function getChannels() {
+		// 	await axios.get("http://localhost:3000/getChannels").then((response) => {
+		// 		setChannels(response.data.channels);
+		// 	});
+		// }
+		// getChannels();
 	}, []);
 
 	return (
 		<div className="Chat">
-			<ChannelList channels={state} setChannels={setChannels} />
+			<ChannelList channel={channels} />
 			<MessagesPanel />
 		</div>
 	);
