@@ -26,7 +26,7 @@ export default function Chat() {
 	}, []);
 
 	return (
-		<div className="Chat">
+		<div className="chat-app">
 			<ChannelList channel={channels} />
 			<MessagesPanel />
 		</div>

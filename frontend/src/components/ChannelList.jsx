@@ -6,7 +6,7 @@ export default function ChannelList({channel}) {
 		console.log(channel);
 	},[]);
 	return (
-		<div className="ChannelList">
+		<div className="channel-list">
 			{channel.map(channel => (
 				<Channel
 					key={channel.id}
