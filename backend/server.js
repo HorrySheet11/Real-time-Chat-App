@@ -3,16 +3,11 @@ const app = express();
 const http = require("node:http").Server(app);
 const io = require("socket.io")(http);
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const mongo =
-	"mongodb+srv://<db_username>:OuqqwrbFQsaCv4W6@learnmongodb.gnmnkhx.mongodb.net/?appName=LearnMongoDB";
+mongoose.connect(process.env.MONGO_URL);
 
-mongoose.connect(mongo, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-});
-
-const chatSchema = newmongoose.Schema({
+const chatSchema = mongoose.Schema({
 	message: String,
 	sender: String,
 	timestamp: { type: Date, default: Date.now },
