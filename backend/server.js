@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const http = require("node:http").Server(app);
 const io = require("socket.io")(http);
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+app.use(cors());
 mongoose.connect(process.env.MONGO_URL);
 
 const chatSchema = mongoose.Schema({
