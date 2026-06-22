@@ -10,9 +10,10 @@ function App() {
 	const [input, setInput] = useState("");
 
 	useEffect(() => {
-		socket.on("chat message", (msg) => {
+		socket.on("new message", (msg) => {
 			setMessages([...messages, msg]);
 		});
+		console.log('sent message');
 	}, [messages]);
 
 	const sendMessage = () => {
