@@ -10,16 +10,16 @@ function App() {
 	const [input, setInput] = useState("");
 
 	useEffect(() => {
-		socket.on("new message", (msg) => {
+		socket.on("new_message", (msg) => {
 			setMessages([...messages, msg]);
 		});
-		console.log('sent message');
 	}, [messages]);
-
+	
 	const sendMessage = () => {
-		e.preventDefault();
+		// e.preventDefault();
+		console.log('sent message');
 		if (input) {
-			socket.emit("chat message", input);
+			socket.emit("chat_message", input);
 			setInput("");
 		}
 	};
@@ -31,8 +31,9 @@ function App() {
 					<li key={index}>{msg}</li>
 				))}
 			</ul>
-      <form onSubmit={sendMessage}>
+      <form onSubmit={() => sendMessage()}>
         <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
+				<button type="submit">Send</button>
       </form>
 		</div>
 	);
