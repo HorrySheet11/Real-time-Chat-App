@@ -7,7 +7,8 @@ const io = require("socket.io")(server, {
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-mongoose.connect(process.env.MONGO_URL);
+mongoose.connect(`${process.env.MONGO_URL}`);
+
 
 const chatSchema = mongoose.Schema({
 	message: String,
@@ -28,8 +29,7 @@ server.listen(port, () => {
 	console.log(`listening on ${port}`);
 });
 
-
-io.on("connection", socket => {
+io.on("connection", (socket) => {
 	console.log("A user connected!");
 
 	socket.on("chat_message", async (msg) => {
@@ -42,8 +42,12 @@ io.on("connection", socket => {
 		io.emit("new_message", msg);
 	});
 
+	socket.on("get_messages", async () => {
+		const messages = await Chat.find();
+		io.emit("messages", messages);
+	});
+
 	socket.on("disconnect", () => {
 		console.log("A user disconnected!");
 	});
 });
-
