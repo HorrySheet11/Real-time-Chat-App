@@ -7,7 +7,7 @@ const io = require("socket.io")(server, {
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-mongoose.connect(`${process.env.MONGO_URL}`);
+mongoose.connect(`${process.env.MONGO_URL}/try`);
 
 
 const chatSchema = mongoose.Schema({
@@ -50,4 +50,10 @@ io.on("connection", (socket) => {
 	socket.on("disconnect", () => {
 		console.log("A user disconnected!");
 	});
+
+	socket.on("get_collections", async	() => {
+		const collections = await mongoose.connection.db.listCollections().toArray();
+		console.log(collections);
+		io.emit("collections", collections);
+	})
 });
