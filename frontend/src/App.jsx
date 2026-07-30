@@ -12,7 +12,7 @@ function App() {
 
 	useEffect(() => {
 		//FIXME: socket not working after adding tailwind
-		socket.emit("get_collections");
+		socket.emit("get_messages");
 
 		socket.on("messages", (messages) => {
 			console.log(messages);
@@ -61,7 +61,7 @@ function App() {
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 				/>
-				<button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded-sm">Send</button>
+				<button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white  py-1 px-2 rounded-sm">Send</button>
 			</form>
 		</div>
 	);

@@ -1,6 +1,10 @@
 @import url('https://use.typekit.net/oov2wcw.css');
 @import "tailwindcss";
 
+@theme{
+    --font-century-gothic: century-gothic, sans-serif; 
+
+}
 
 :root {
   --text: #6b6375;
