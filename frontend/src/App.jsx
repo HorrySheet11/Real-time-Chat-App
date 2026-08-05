@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import "./App.css";
 import ChatBox from "./components/ChatBox";
 import ChatGroups from "./components/ChatGroups";
 import { socket } from "./services/socket";

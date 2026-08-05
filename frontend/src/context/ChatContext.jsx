@@ -5,7 +5,7 @@ export const ChatContext = createContext(null);
 
 export const ChatProvider = ({ children }) => {
   const [input, setInput] = useState("");
-  const [chatGroup, setChatGroup] = useState(null);
+  const [chatGroup, setChatGroup] = useState('Chat');
   return (
     <ChatContext.Provider
       value={{ input, setInput, chatGroup, setChatGroup, socket }}
