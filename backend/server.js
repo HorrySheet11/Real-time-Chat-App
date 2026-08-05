@@ -15,13 +15,11 @@ const chatSchema = mongoose.Schema({
 	timestamp: { type: Date, default: Date.now },
 });
 
-
 let selectedGroup = "Chut";
 function newChat() {
 	return mongoose.connection.model(`${selectedGroup}`, chatSchema);
 }
 let Chat = newChat();
-
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {

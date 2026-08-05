@@ -12,22 +12,24 @@ export default function ChatBox() {
 		}
 	};
 	return (
-		<form
-			onSubmit={() => sendMessage()}
-			className="flex flex-row justify-center gap-1"
-		>
-			<input
-				className="rounded-sm border"
-				type="text"
-				value={input}
-				onChange={(e) => setInput(e.target.value)}
-			/>
-			<button
-				type="submit"
-				className="bg-blue-500 hover:bg-blue-700 text-white  py-1 px-2 rounded-sm"
+		<div className='bg-darkBg fixed inset-x-0 bottom-0 py-1 border-t'>
+			<form
+				onSubmit={() => sendMessage()}
+				className="flex flex-row justify-center gap-1"
 			>
-				Send
-			</button>
-		</form>
+				<input
+					className="rounded-sm border"
+					type="text"
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+				/>
+				<button
+					type="submit"
+					className="bg-blue-500 hover:bg-blue-700 text-white  py-1 px-2 rounded-sm"
+				>
+					Send
+				</button>
+			</form>
+		</div>
 	);
 }
