@@ -53,7 +53,6 @@ io.on("connection", (socket) => {
 
 	socket.on("get_collections", async	() => {
 		const collections = await mongoose.connection.db.listCollections().toArray();
-		console.log(collections);
 		io.emit("collections", collections);
 	})
 });

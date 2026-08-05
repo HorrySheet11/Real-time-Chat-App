@@ -1,6 +1,12 @@
 @import url('https://use.typekit.net/oov2wcw.css');
 @import "tailwindcss";
 
+@layer base {
+  #root{
+    @apply min-h-screen
+  }
+}
+
 @theme{
     --font-century-gothic: century-gothic, sans-serif; 
 

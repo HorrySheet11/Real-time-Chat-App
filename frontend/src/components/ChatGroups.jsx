@@ -16,10 +16,10 @@ export default function ChatGroups() {
 	},[]);
   
 	return (
-		<div>
+		<div className='absolute top-0 left-0 h-full w-min p-4 border-white border rounded-sm '>
 			<ul>
 				{chatGroups.map((group) => (
-					<li key={group.info.uuid}>{group.name}</li>
+					<li key={group.info.uuid}><button type="button" className=" cursor-pointer">{group.name}</button></li>
 				))}
 			</ul>
 		</div>
