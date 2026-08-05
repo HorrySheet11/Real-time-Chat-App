@@ -1,25 +1,36 @@
-import { useEffect, useState } from "react";
-import io from "socket.io-client";
-
-const backend = import.meta.env.BACKEND_URL || "http://localhost:3000";
-const socket = io(backend);
-
+import { useContext, useEffect, useState } from "react";
+import { ChatContext } from "../context/ChatContext";
+import {socket} from "../services/socket";
 export default function ChatGroups() {
+	const { chatGroup, setChatGroup} = useContext(ChatContext);
 	const [chatGroups, setChatGroups] = useState([]);
 
 	useEffect(() => {
 		socket.emit("get_collections");
 		socket.on("collections", (collections) => {
-			console.log(collections);
 			setChatGroups(collections);
 		});
-	},[]);
-  
+	}, []);
+
+	async function changeChatGroup(chatGroup) {
+		console.log(`changed to ${chatGroup}`);
+		socket.emit("change_collection", chatGroup);
+		setChatGroup(chatGroup);
+	}
+
 	return (
-		<div className='absolute top-0 left-0 h-full w-min p-4 border-white border rounded-sm '>
+		<div className="absolute top-0 left-0  w-min p-4 border-white border rounded-sm ">
 			<ul>
 				{chatGroups.map((group) => (
-					<li key={group.info.uuid}><button type="button" className=" cursor-pointer">{group.name}</button></li>
+					<li key={group.info.uuid}>
+						<button
+							type="button"
+							className=" cursor-pointer"
+							onClick={() => changeChatGroup(group.name)}
+						>
+							{group.name}
+						</button>
+					</li>
 				))}
 			</ul>
 		</div>

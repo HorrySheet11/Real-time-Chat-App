@@ -9,28 +9,35 @@ require("dotenv").config();
 
 mongoose.connect(`${process.env.MONGO_URL}/try`);
 
-
 const chatSchema = mongoose.Schema({
 	message: String,
 	sender: String,
 	timestamp: { type: Date, default: Date.now },
 });
 
-const Chat = mongoose.model("Chat", chatSchema);
+
+let selectedGroup = "Chut";
+function newChat() {
+	return mongoose.connection.model(`${selectedGroup}`, chatSchema);
+}
+let Chat = newChat();
+
 
 const port = process.env.PORT || 3000;
-
-// app.get("/", (req, res) => {
-// 	res.send("Hello World!");
-// 	console.log("Hello World!");
-// });
-
 server.listen(port, () => {
 	console.log(`listening on ${port}`);
 });
 
 io.on("connection", (socket) => {
 	console.log("A user connected!");
+
+	socket.on("change_collection", async (group) => {
+		console.log(`changed to ${group}`);
+		selectedGroup = group;
+		Chat = newChat();
+		const messages = await Chat.find();
+		io.emit("messages", messages);
+	});
 
 	socket.on("chat_message", async (msg) => {
 		console.log(`message: ${msg}`);
@@ -51,8 +58,10 @@ io.on("connection", (socket) => {
 		console.log("A user disconnected!");
 	});
 
-	socket.on("get_collections", async	() => {
-		const collections = await mongoose.connection.db.listCollections().toArray();
+	socket.on("get_collections", async () => {
+		const collections = await mongoose.connection.db
+			.listCollections()
+			.toArray();
 		io.emit("collections", collections);
-	})
+	});
 });

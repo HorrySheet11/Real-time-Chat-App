@@ -10,8 +10,8 @@ function App() {
 
 	useEffect(() => {
 		socket.emit("get_messages");
-
 		socket.on("messages", (messages) => {
+			console.log(messages);
 			setMessages(messages);
 		});
 	}, []);
