@@ -20,7 +20,7 @@ export default function ChatBox() {
 			>	<h3 className='my-auto'>{chatGroup}</h3>
 				<div className="flex flex-row justify-center gap-1">
 					<input
-						className="rounded-sm border"
+						className="rounded-sm border p-1"
 						type="text"
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
