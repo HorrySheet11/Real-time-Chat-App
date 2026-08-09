@@ -5,10 +5,11 @@ export const ChatContext = createContext(null);
 
 export const ChatProvider = ({ children }) => {
   const [input, setInput] = useState("");
-  const [chatGroup, setChatGroup] = useState('Chat');
+  const [chatGroup, setChatGroup] = useState('');
+  const [chatGroups, setChatGroups] = useState([]);
   return (
     <ChatContext.Provider
-      value={{ input, setInput, chatGroup, setChatGroup, socket }}
+      value={{ input, setInput, chatGroup, setChatGroup, chatGroups, setChatGroups, socket }}
     >
       {children}
     </ChatContext.Provider>

@@ -15,11 +15,15 @@ const chatSchema = mongoose.Schema({
 	timestamp: { type: Date, default: Date.now },
 });
 
-let selectedGroup = "Chut";
-function newChat() {
-	return mongoose.connection.model(`${selectedGroup}`, chatSchema);
+// Cache for models per collection
+const modelCache = new Map();
+
+function getModel(collectionName) {
+	if (!modelCache.has(collectionName)) {
+		modelCache.set(collectionName, mongoose.connection.model(collectionName, chatSchema));
+	}
+	return modelCache.get(collectionName);
 }
-let Chat = newChat();
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
@@ -29,37 +33,87 @@ server.listen(port, () => {
 io.on("connection", (socket) => {
 	console.log("A user connected!");
 
+	// Initialize current collection for this socket
+	socket.currentCollection = null;
+
 	socket.on("change_collection", async (group) => {
 		console.log(`changed to ${group}`);
-		selectedGroup = group;
-		Chat = newChat();
-		const messages = await Chat.find();
-		io.emit("messages", messages);
+
+		// Leave the previous room if any
+		if (socket.currentCollection) {
+			socket.leave(socket.currentCollection);
+			console.log(`left room ${socket.currentCollection}`);
+		}
+
+		// Join the new room
+		socket.join(group);
+		socket.currentCollection = group;
+		console.log(`joined room ${group}`);
+
+		// Fetch messages for this collection and send to this socket
+		try {
+			const Chat = getModel(group);
+			const messages = await Chat.find();
+			socket.emit("messages", messages);
+		} catch (err) {
+			console.error(`Error fetching messages for ${group}:`, err);
+			socket.emit("messages", []); // Send empty array on error
+		}
 	});
 
 	socket.on("chat_message", async (msg) => {
 		console.log(`message: ${msg}`);
-		const newChat = Chat({
-			message: msg,
-			sender: "user",
-		});
-		await newChat.save();
-		io.emit("new_message", msg);
+
+		if (!socket.currentCollection) {
+			console.warn("Received chat_message but no collection selected");
+			return;
+		}
+
+		try {
+			const Chat = getModel(socket.currentCollection);
+			const newChat = new Chat({
+				message: msg,
+				sender: "user",
+			});
+			await newChat.save();
+
+			// Broadcast the message to everyone in the room
+			const messages = await Chat.find();
+			io.to(socket.currentCollection).emit("messages", messages);
+		} catch (err) {
+			console.error(`Error saving message to ${socket.currentCollection}:`, err);
+		}
 	});
 
 	socket.on("get_messages", async () => {
-		const messages = await Chat.find();
-		io.emit("messages", messages);
+		if (!socket.currentCollection) {
+			console.warn("get_messages called but no collection selected");
+			socket.emit("messages", []); // Send empty array
+			return;
+		}
+
+		try {
+			const Chat = getModel(socket.currentCollection);
+			const messages = await Chat.find();
+			socket.emit("messages", messages);
+		} catch (err) {
+			console.error(`Error fetching messages for ${socket.currentCollection}:`, err);
+			socket.emit("messages", []); // Send empty array on error
+		}
+	});
+
+	socket.on("get_collections", async () => {
+		try {
+			const collections = await mongoose.connection.db.listCollections().toArray();
+			socket.emit("collections", collections);
+		} catch (err) {
+			console.error("Error fetching collections:", err);
+			socket.emit("collections", []); // Send empty array on error
+		}
 	});
 
 	socket.on("disconnect", () => {
 		console.log("A user disconnected!");
-	});
-
-	socket.on("get_collections", async () => {
-		const collections = await mongoose.connection.db
-			.listCollections()
-			.toArray();
-		io.emit("collections", collections);
+		// Rooms are left automatically on disconnect
 	});
 });
