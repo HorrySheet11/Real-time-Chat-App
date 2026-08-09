@@ -78,7 +78,8 @@ io.on("connection", (socket) => {
 			await newChat.save();
 
 			// Broadcast the message to everyone in the room
-			io.to(socket.currentCollection).emit("new_message", msg);
+			const messages = await Chat.find();
+			io.to(socket.currentCollection).emit("messages", messages);
 		} catch (err) {
 			console.error(`Error saving message to ${socket.currentCollection}:`, err);
 		}

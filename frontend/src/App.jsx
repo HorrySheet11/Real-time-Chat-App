@@ -14,7 +14,6 @@ function App() {
     // Fetch messages for initial load (will be overridden when collection selected)
     socket.emit("get_messages");
     socket.on("messages", (messages) => {
-      console.log(messages);
       setMessages(messages);
     });
     socket.on("new_message", (msg) => {
