@@ -6,13 +6,15 @@ const io = require("socket.io")(server, {
 });
 const mongoose = require("mongoose");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").MongoStore;
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 mongoose.connect(`${process.env.MONGO_URL}/try`);
+
+const store = MongoStore.create({ mongoUrl: `${process.env.MONGO_URL}/try` });
 
 const chatSchema = mongoose.Schema({
   message: String,
@@ -74,7 +76,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: `${process.env.MONGO_URL}/try` }),
+  store: store,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 // 24 hours
   }
@@ -165,10 +167,27 @@ const sessionMiddleware = session({
   secret: process.env.SESSION_SECRET || 'fallback-secret',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: `${process.env.MONGO_URL}/try` }),
+  store: store,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 // 24 hours
   }
+});
+
+io.use((socket, next) => {
+  // We'll try to get the session from the handshake
+  const req = socket.handshake;
+  const res = {};
+  sessionMiddleware(req, res, () => {
+    // If the session is authenticated, we can attach the user to the socket
+    if (req.session && req.session.passport && req.session.passport.user) {
+      socket.userId = req.session.passport.user;
+      return next();
+    }
+    // If not authenticated, we can still allow connection but mark as unauthenticated
+    // We'll handle authentication in the events.
+    socket.userId = null;
+    return next();
+  });
 });
 
 io.on("connection", (socket) => {

@@ -76,7 +76,12 @@ export default function Login({ onAuthSuccess }) {
 			</form>
 			<p className="text-center text-sm">
 				Don't have an account?{" "}
-				<span className="text-blue-500 cursor-pointer" onClick={() => setAuthMode("register")}>
+				{/** biome-ignore lint/a11y/noStaticElementInteractions: link to register */}
+				{/** biome-ignore lint/a11y/useKeyWithClickEvents: link to register */}
+				<span
+					className="text-blue-500 cursor-pointer"
+					onClick={() => setAuthMode("register")}
+				>
 					Register
 				</span>
 			</p>
