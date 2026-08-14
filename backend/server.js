@@ -1,7 +1,12 @@
 const express = require("express");
 const app = express();
-//TODO: cors error
+require("dotenv").config();
 const cors = require("cors");
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
+app.use(express.json());
 const server = require("node:http").createServer(app);
 const io = require("socket.io")(server, {
   cors: { origin: "http://localhost:5173" },
@@ -12,7 +17,6 @@ const MongoStore = require("connect-mongo").MongoStore;
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
-require("dotenv").config();
 
 mongoose.connect(`${process.env.MONGO_URL}/try`);
 
@@ -94,9 +98,10 @@ function ensureAuthenticated(req, res, next) {
   }
   res.status(401).json({ message: 'Unauthorized' });
 }
-
+ 
 // Routes
 app.post('/api/register', async (req, res) => {
+  console.log(req.body);
   try {
     const { username, password } = req.body;
     if (!username || !password) {

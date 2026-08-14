@@ -4,6 +4,9 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 
+api.defaults.headers.common = {
+  "Content-Type": "application/json"
+}
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");

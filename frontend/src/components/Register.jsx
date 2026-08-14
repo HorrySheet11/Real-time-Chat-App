@@ -15,23 +15,16 @@ export default function Register({ onAuthSuccess }) {
 		setError("");
 		setLoading(true);
 		try {
-			const response = await api.post(
-				"/api/register",
-				{
+			console.log(username, password);
+			const response = await api
+				.post("/api/register", {
 					username,
 					password,
-				},
-				{
-					headers: {
-						"Content-Type": "application/json",
-					},
-					withCredentials: true,
-					// AccessControlAllowCredentials: true
-				},
-			);
+				})
+
 
 			const data = await response.data;
-			console.log(data)
+			console.log(response);
 			if (!response.ok) {
 				throw new Error(data.message || "Registration failed");
 			}
