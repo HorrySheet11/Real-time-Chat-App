@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { ChatContext } from "../context/ChatContext";
+import api from "../services/axios";
 
 export default function Register({ onAuthSuccess }) {
 	const [username, setUsername] = useState("");
@@ -14,16 +15,23 @@ export default function Register({ onAuthSuccess }) {
 		setError("");
 		setLoading(true);
 		try {
-			const response = await fetch("/api/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await api.post(
+				"/api/register",
+				{
+					username,
+					password,
 				},
-				body: JSON.stringify({ username, password }),
-				credentials: "include",
-			});
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					withCredentials: true,
+					// AccessControlAllowCredentials: true
+				},
+			);
 
-			const data = await response.json();
+			const data = await response.data;
+			console.log(data)
 			if (!response.ok) {
 				throw new Error(data.message || "Registration failed");
 			}
@@ -41,7 +49,7 @@ export default function Register({ onAuthSuccess }) {
 		<div className="space-y-4">
 			<h2 className="text-xl font-bold">Register</h2>
 			{error && <p className="text-red-500">{error}</p>}
-			<form onSubmit={() => handleSubmit(e)} className="space-y-3">
+			<form onSubmit={(e) => handleSubmit(e)} className="space-y-3">
 				<div>
 					<label className="block text-sm font-medium mb-1">
 						Username{" "}

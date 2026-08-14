@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { ChatContext } from "../context/ChatContext";
+import api from "../services/axios";
 
 export default function Login({ onAuthSuccess }) {
 	const [username, setUsername] = useState("");
@@ -10,20 +11,26 @@ export default function Login({ onAuthSuccess }) {
 	const { setAuthMode } = useContext(ChatContext);
 
 	const handleSubmit = async (e) => {
-		e.preventDefault();
+		// e.preventDefault();
 		setError("");
 		setLoading(true);
 		try {
-			const response = await fetch("/api/login", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await api.post(
+				"/api/login",
+				{
+					username,
+					password,
 				},
-				body: JSON.stringify({ username, password }),
-				credentials: "include", // Important for sending cookies
-			});
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					withCredentials: true,
+					AccessControlAllowCredentials: true,
+				},
+			);
 
-			const data = await response.json();
+			const data = await response.data;
 			if (!response.ok) {
 				throw new Error(data.message || "Login failed");
 			}

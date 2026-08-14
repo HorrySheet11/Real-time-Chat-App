@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+//TODO: cors error
+const cors = require("cors");
 const server = require("node:http").createServer(app);
 const io = require("socket.io")(server, {
-  cors: { origin: "*" },
+  cors: { origin: "http://localhost:5173" },
 });
 const mongoose = require("mongoose");
 const session = require("express-session");
@@ -112,6 +114,7 @@ app.post('/api/register', async (req, res) => {
       username: user.username
     };
     res.status(201).json({ message: 'User registered successfully', user: safeUser });
+    console.log(`User registered: ${user.username}`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -124,6 +127,7 @@ app.post('/api/login', passport.authenticate('local'), (req, res) => {
     username: req.user.username
   };
   res.json({ message: 'Logged in successfully', user: safeUser });
+  console.log(`User logged in: ${req.user.username}`);
 });
 
 app.post('/api/logout', (req, res) => {
@@ -151,7 +155,7 @@ io.use((socket, next) => {
   const res = {};
   sessionMiddleware(req, res, () => {
     // If the session is authenticated, we can attach the user to the socket
-    if (req.session && req.session.passport && req.session.passport.user) {
+    if (req.session?.passport?.user) {
       socket.userId = req.session.passport.user;
       return next();
     }
@@ -179,7 +183,7 @@ io.use((socket, next) => {
   const res = {};
   sessionMiddleware(req, res, () => {
     // If the session is authenticated, we can attach the user to the socket
-    if (req.session && req.session.passport && req.session.passport.user) {
+    if (req.session?.passport?.user) {
       socket.userId = req.session.passport.user;
       return next();
     }
