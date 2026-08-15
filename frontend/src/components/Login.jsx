@@ -23,14 +23,12 @@ export default function Login({ onAuthSuccess }) {
 				},
 			);
 
-			const data = await response.data;
-			if (!response.ok) {
-				throw new Error(data.message || "Login failed");
-			}
-
 			// Assuming the response includes { message, user: { _id, username } }
+			const data = response.data;
+			console.log(data);
 			onAuthSuccess(data.user);
 		} catch (err) {
+			console.log(err);
 			setError(err.message);
 		} finally {
 			setLoading(false);

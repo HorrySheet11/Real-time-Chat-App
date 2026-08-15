@@ -101,7 +101,6 @@ function ensureAuthenticated(req, res, next) {
  
 // Routes
 app.post('/api/register', async (req, res) => {
-  console.log(req.body);
   try {
     const { username, password } = req.body;
     if (!username || !password) {
@@ -127,12 +126,14 @@ app.post('/api/register', async (req, res) => {
 });
 
 app.post('/api/login', passport.authenticate('local'), (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
   const safeUser = {
     _id: req.user._id,
     username: req.user.username
   };
   res.json({ message: 'Logged in successfully', user: safeUser });
-  console.log(`User logged in: ${req.user.username}`);
 });
 
 app.post('/api/logout', (req, res) => {
@@ -242,7 +243,22 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("chat_message", async (msg) => {
+  socket.on("chat_message", async (data) => {
+    let msg;
+    let senderUsername;
+
+    // Handle both string and object formats for backward compatibility
+    if (typeof data === 'string') {
+      msg = data;
+      senderUsername = socket.user?.username;
+    } else if (data && typeof data === 'object' && data.message !== undefined) {
+      msg = data.message;
+      senderUsername = data.user?.username || socket.user?.username;
+    } else {
+      console.warn("Invalid chat_message format:", data);
+      return;
+    }
+
     console.log(`message: ${msg}`);
 
     if (!socket.currentCollection) {
@@ -250,8 +266,8 @@ io.on("connection", (socket) => {
       return;
     }
 
-    // Check if user is authenticated
-    if (!socket.user) {
+    // Check if user is authenticated (either from session or from data)
+    if (!socket.user && !data.user) {
       console.warn("Unauthenticated user tried to send a message");
       return;
     }
@@ -260,7 +276,7 @@ io.on("connection", (socket) => {
       const Chat = getModel(socket.currentCollection);
       const newChat = new Chat({
         message: msg,
-        sender: socket.user.username, // Use the authenticated user's username
+        sender: senderUsername, // Use the username from data or session
       });
       await newChat.save();
 
@@ -292,8 +308,8 @@ io.on("connection", (socket) => {
   socket.on("get_collections", async () => {
     try {
       const collections = await mongoose.connection.db.listCollections().toArray();
-      // Filter out the 'users' collection
-      const filteredCollections = collections.filter(c => c.name !== 'users');
+      // Filter out the 'users' and 'sessions' collections
+      const filteredCollections = collections.filter(c => c.name !== 'users' && c.name !== 'sessions');
       socket.emit("collections", filteredCollections);
     } catch (err) {
       console.error("Error fetching collections:", err);

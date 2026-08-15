@@ -22,7 +22,6 @@ export default function Register({ onAuthSuccess }) {
 					password,
 				})
 
-
 			const data = await response.data;
 			console.log(response);
 			if (!response.ok) {

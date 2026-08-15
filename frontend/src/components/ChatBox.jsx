@@ -1,26 +1,30 @@
-import {  useState, useContext } from "react";
-import { socket } from "../services/socket.js";
+import { useContext, useState } from "react";
 import { ChatContext } from "../context/ChatContext";
+import { socket } from "../services/socket.js";
 
 export default function ChatBox() {
-  const [input, setInput] = useState("");
-	const {chatGroup} = useContext(ChatContext);
+	const [input, setInput] = useState("");
+	const { chatGroup,user } = useContext(ChatContext);
 	const sendMessage = () => {
-		console.log("sent message");
 		if (input) {
-			socket.emit("chat_message", input);
+			socket.emit("chat_message", { message: input, user: user });
 			setInput("");
 		}
+		console.log("sent message");
 	};
 	return (
-		<div className='bg-darkBg fixed inset-x-0 bottom-0 py-1 border-t'>
+		<div className="bg-darkBg fixed inset-x-0 bottom-0 py-1 border-t flex-row">
+
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
 					sendMessage();
 				}}
 				className="flex flex-row justify-center gap-1"
-			>	<h3 className='my-auto'>{chatGroup}</h3>
+			>
+				{" "}
+				<h3 className="my-auto">{user?.username}</h3>
+				<h3 className="my-auto">in {chatGroup}</h3>
 				<div className="flex flex-row justify-center gap-1">
 					<input
 						className="rounded-sm border p-1"
