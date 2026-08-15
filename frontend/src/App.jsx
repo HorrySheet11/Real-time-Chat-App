@@ -83,7 +83,6 @@ function App() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-darkBg">
         <div className="bg-darkBg p-8 rounded-lg shadow-md w-full max-w-md">
           <h1 className="text-2xl font-bold mb-6 text-center">Horry Chat!</h1>
-          {/* Toggle between login and register */}
           <div className="flex mb-4">
             <button type="button"
               onClick={() => setAuthMode('login')}

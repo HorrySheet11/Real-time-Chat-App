@@ -11,7 +11,7 @@ export default function Login({ onAuthSuccess }) {
 	const { setAuthMode } = useContext(ChatContext);
 
 	const handleSubmit = async (e) => {
-		// e.preventDefault();
+		e.preventDefault();
 		setError("");
 		setLoading(true);
 		try {
@@ -20,13 +20,6 @@ export default function Login({ onAuthSuccess }) {
 				{
 					username,
 					password,
-				},
-				{
-					headers: {
-						"Content-Type": "application/json",
-					},
-					withCredentials: true,
-					AccessControlAllowCredentials: true,
 				},
 			);
 
