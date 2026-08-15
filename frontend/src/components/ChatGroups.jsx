@@ -11,7 +11,7 @@ export default function ChatGroups() {
   }
 
   return (
-    <div className="absolute top-0 left-0  w-min p-3  border-r h-screen ">
+    <div className="absolute top-0 left-0  w-min p-3  border-r h-full ">
       <ul className="flex flex-col gap-2">
         {chatGroups.map((group) => (
           <li key={group.info.uuid} className='bg-slate-800 px-2 py-0.5 rounded-sm '>
