@@ -2,11 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import ChatBox from "../components/ChatBox";
 import ChatGroups from "../components/ChatGroups";
 import { ChatContext } from "../context/ChatContext";
+import api from "../services/axios";
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState([]);
 	const {
 		user,
+    setUser,
 		input,
 		setInput,
 		// chatGroup,
@@ -60,10 +62,7 @@ export default function ChatPage() {
 
 	const handleLogout = async () => {
 		try {
-			await fetch("/api/logout", {
-				method: "POST",
-				credentials: "include",
-			});
+      await api.post("/api/logout");
 		} catch (err) {
 			console.error("Logout failed", err);
 		} finally {
@@ -85,14 +84,35 @@ export default function ChatPage() {
 				</button>
 			</div>
 			<ChatGroups />
-			<ul className="flex flex-col">
-				{messages.map((msg) => (
+			<ul className="flex flex-col pl-25 pb-8">
+				{/* {messages.map((msg) => (
 					<li key={msg._id}>
 						{msg.sender}: {msg.message}
 					</li>
+				))} */}
+				{messages.map((msg) => (
+					<li key={msg._id} className="mb-4">
+						{msg.sender === user?.username ? (
+							<div className="flex justify-end">
+								<div className="bg-blue-500 text-white p-1 rounded-lg max-w-[70%]">
+
+									<p className="m-0">{msg.message}</p>
+								</div>
+							</div>
+						) : (
+							<div className="flex gap-0 justify-start">
+								<div className="bg-gray-600 text-white p-1 rounded-lg max-w-[70%]">
+									<div className="flex justify-between">
+										<small className="text-gray-200">{msg.sender}</small>
+									</div>
+									<p className="m-0">{msg.message}</p>
+								</div>
+							</div>
+						)}
+					</li>
 				))}
 			</ul>
-			
+
 			<ChatBox />
 		</div>
 	);
