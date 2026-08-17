@@ -25,11 +25,15 @@ export default function Login({ onAuthSuccess }) {
 
 			// Assuming the response includes { message, user: { _id, username } }
 			const data = response.data;
-			console.log(data);
+			// console.log(data);
 			onAuthSuccess(data.user);
 		} catch (err) {
 			console.log(err);
-			setError(err.message);
+			if (err.response && err.response.status === 401) {
+				setError('Unauthorized');
+			} else {
+				setError(err.response?.data?.message || err.message);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -71,18 +75,18 @@ export default function Login({ onAuthSuccess }) {
 				>
 					{loading ? "Logging in..." : "Login"}
 				</button>
+				<p className="text-center text-sm">
+					Don't have an account?{" "}
+					{/** biome-ignore lint/a11y/noStaticElementInteractions: link to register */}
+					{/** biome-ignore lint/a11y/useKeyWithClickEvents: link to register */}
+					<span
+						className="text-blue-500 cursor-pointer"
+						onClick={() => setAuthMode("register")}
+					>
+						Register
+					</span>
+				</p>
 			</form>
-			<p className="text-center text-sm">
-				Don't have an account?{" "}
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: link to register */}
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: link to register */}
-				<span
-					className="text-blue-500 cursor-pointer"
-					onClick={() => setAuthMode("register")}
-				>
-					Register
-				</span>
-			</p>
 		</div>
 	);
 }

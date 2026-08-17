@@ -15,19 +15,13 @@ export default function Register({ onAuthSuccess }) {
 		setError("");
 		setLoading(true);
 		try {
-			console.log(username, password);
-			const response = await api
-				.post("/api/register", {
-					username,
-					password,
-				})
+			// console.log(username, password);
+			const response = await api.post("/api/register", {
+				username,
+				password,
+			});
 
-			const data = await response.data;
-			console.log(response);
-			if (!response.ok) {
-				throw new Error(data.message || "Registration failed");
-			}
-
+			const data = response.data;
 			// Assuming the response includes { message, user: { _id, username } }
 			onAuthSuccess(data.user);
 		} catch (err) {
@@ -74,18 +68,18 @@ export default function Register({ onAuthSuccess }) {
 				>
 					{loading ? "Registering..." : "Register"}
 				</button>
+				<p className="text-center text-sm">
+					Already have an account?{" "}
+					{/** biome-ignore lint/a11y/noStaticElementInteractions: link to login */}
+					{/** biome-ignore lint/a11y/useKeyWithClickEvents: link to login */}
+					<span
+						className="text-blue-500 cursor-pointer"
+						onClick={() => setAuthMode("login")}
+					>
+						Login
+					</span>
+				</p>
 			</form>
-			<p className="text-center text-sm">
-				Already have an account?{" "}
-				{/** biome-ignore lint/a11y/noStaticElementInteractions: link to login */}
-				{/** biome-ignore lint/a11y/useKeyWithClickEvents: link to login */}
-				<span
-					className="text-blue-500 cursor-pointer"
-					onClick={() => setAuthMode("login")}
-				>
-					Login
-				</span>
-			</p>
 		</div>
 	);
 }

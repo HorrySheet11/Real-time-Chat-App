@@ -13,10 +13,6 @@ function App() {
 		setAuthMode("login");
 	};
 
-	useEffect(() => {
-		console.log(user);
-	}, [user]);
-
 	return (
 		<div>
 			{user ? (

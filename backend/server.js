@@ -18,9 +18,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 
-mongoose.connect(`${process.env.MONGO_URL}/try`);
+mongoose.connect(`${process.env.MONGO_URL}/${process.env.DATABASE_NAME}`);
 
-const store = MongoStore.create({ mongoUrl: `${process.env.MONGO_URL}/try` });
+const store = MongoStore.create({ mongoUrl: `${process.env.MONGO_URL}/${process.env.DATABASE_NAME}` });
 
 const chatSchema = mongoose.Schema({
   message: String,
