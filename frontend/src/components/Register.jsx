@@ -15,7 +15,6 @@ export default function Register({ onAuthSuccess }) {
 		setError("");
 		setLoading(true);
 		try {
-			// console.log(username, password);
 			const response = await api.post("/api/register", {
 				username,
 				password,

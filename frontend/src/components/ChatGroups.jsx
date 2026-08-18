@@ -5,7 +5,7 @@ export default function ChatGroups() {
   const { setChatGroup, chatGroups, socket } = useContext(ChatContext);
 
   async function changeChatGroup(chatGroup) {
-    console.log(`changed to ${chatGroup}`);
+    // console.log(`changed to ${chatGroup}`);
     socket.emit("change_collection", chatGroup);
     setChatGroup(chatGroup);
   }

@@ -27,13 +27,13 @@ export default function ChatPage() {
 				setMessages(messages);
 			});
 			socket.on("new_message", (msg) => {
-				console.log("new_message", msg);
+				// console.log("new_message", msg);
 				setMessages((prev) => [...prev, msg]);
 			});
 			// Fetch all chat groups/collections on start
 			socket.emit("get_collections");
 			socket.on("collections", (collections) => {
-				console.log("collections received:", collections);
+				// console.log("collections received:", collections);
 				setChatGroups(collections);
 			});
 		} else {
@@ -53,7 +53,7 @@ export default function ChatPage() {
 	}, [user]);
 
 	const sendMessage = () => {
-		console.log("sent message");
+		// console.log("sent message");
 		if (input) {
 			socket.emit("chat_message", input);
 			setInput("");

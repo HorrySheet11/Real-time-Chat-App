@@ -11,7 +11,7 @@ function App() {
 	const [checkingBackend, setCheckingBackend] = useState(false);
 
 	const handleAuthSuccess = (userData) => {
-		console.log("User authenticated:", userData);
+		// console.log("User authenticated:", userData);
 		setUser(userData);
 		setAuthMode("login");
 	};

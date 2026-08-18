@@ -10,7 +10,7 @@ export default function ChatBox() {
 			socket.emit("chat_message", { message: input, user: user });
 			setInput("");
 		}
-		console.log("sent message");
+		// console.log("sent message");
 	};
 	return (
 		<div className="bg-darkBg fixed inset-x-0 bottom-0 py-1 border-t flex-row">
