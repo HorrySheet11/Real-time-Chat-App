@@ -6,7 +6,7 @@ const { getModel } = require('../models/Chat');
 
 function setupSocket(httpServer, sessionStore) {
   const io = require('socket.io')(httpServer, {
-    cors: { origin: 'http://localhost:5173' },
+    cors: { origin: process.env.FRONTEND_URL || 'http://localhost:5173', credentials: true },
   });
 
   // Session middleware for socket.io
