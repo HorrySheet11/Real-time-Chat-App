@@ -16,4 +16,6 @@ router.post('/logout', authController.logout);
 // Get user route
 router.get('/user', ensureAuthenticated, authController.getUser);
 
+router.get('/health', authController.health);
+
 module.exports = router;
