@@ -62,7 +62,7 @@ export default function ChatPage() {
 
 	const handleLogout = async () => {
 		try {
-      await api.post("/api/logout");
+	      await api.post("/api/logout");
 		} catch (err) {
 			console.error("Logout failed", err);
 		} finally {
@@ -85,17 +85,11 @@ export default function ChatPage() {
 			</div>
 			<ChatGroups />
 			<ul className="flex flex-col pl-25 pb-8">
-				{/* {messages.map((msg) => (
-					<li key={msg._id}>
-						{msg.sender}: {msg.message}
-					</li>
-				))} */}
 				{messages.map((msg) => (
 					<li key={msg._id} className="mb-4">
 						{msg.sender === user?.username ? (
 							<div className="flex justify-end">
 								<div className="bg-blue-500 text-white p-1 rounded-lg max-w-[70%]">
-
 									<p className="m-0">{msg.message}</p>
 								</div>
 							</div>

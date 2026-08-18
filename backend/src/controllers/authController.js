@@ -61,3 +61,7 @@ exports.getUser = (req, res) => {
     res.status(401).json({ message: 'Unauthorized' });
   }
 };
+
+exports.health = (req, res) => {
+  res.status(200).json({ status: 'ok' });
+}

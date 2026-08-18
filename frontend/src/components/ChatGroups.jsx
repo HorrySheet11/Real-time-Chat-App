@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { ChatContext } from "../context/ChatContext";
 
 export default function ChatGroups() {
-  const { chatGroup, setChatGroup, chatGroups, socket } = useContext(ChatContext);
+  const { setChatGroup, chatGroups, socket } = useContext(ChatContext);
 
   async function changeChatGroup(chatGroup) {
     console.log(`changed to ${chatGroup}`);
