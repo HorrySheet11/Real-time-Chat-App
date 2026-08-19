@@ -50,32 +50,33 @@ export default function ChatPage() {
 	}, [user]);
 
 	return (
-		<div className="flex flex-col relative">
-			<ChatGroups />
-			<ul className="flex flex-col pl-25 pb-8">
-				{messages.map((msg) => (
-					<li key={msg._id} className="mb-4">
-						{msg.sender === user?.username ? (
-							<div className="flex justify-end">
-								<div className="bg-blue-500 text-white p-1 rounded-lg max-w-[70%]">
-									<p className="m-0">{msg.message}</p>
-								</div>
-							</div>
-						) : (
-							<div className="flex gap-0 justify-start">
-								<div className="bg-gray-600 text-white p-1 rounded-lg max-w-[70%]">
-									<div className="flex justify-between">
-										<small className="text-gray-200">{msg.sender}</small>
+		<div className="flex h-screen relative">
+			<ChatGroups className="w-64 border-r" />
+			<div className="flex-1 flex-col m-3">
+				<ul className="flex flex-col flex-1 overflow-y-auto pb-12">
+					{messages.map((msg) => (
+						<li key={msg._id} className="mb-4">
+							{msg.sender === user?.username ? (
+								<div className="flex justify-end">
+									<div className="bg-blue-500 text-white p-1 rounded-lg max-w-[70%]">
+										<p className="m-0">{msg.message}</p>
 									</div>
-									<p className="m-0">{msg.message}</p>
 								</div>
-							</div>
-						)}
-					</li>
-				))}
-			</ul>
-
-			<ChatBox />
+							) : (
+								<div className="flex gap-0 justify-start">
+									<div className="bg-gray-600 text-white p-1 rounded-lg max-w-[70%]">
+										<div className="flex justify-between">
+											<small className="text-gray-200">{msg.sender}</small>
+										</div>
+										<p className="m-0">{msg.message}</p>
+									</div>
+								</div>
+							)}
+						</li>
+					))}
+				</ul>
+				<ChatBox />
+			</div>
 		</div>
 	);
 }
