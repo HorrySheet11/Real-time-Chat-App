@@ -11,9 +11,6 @@ export default function ChatPage() {
     setUser,
 		input,
 		setInput,
-		// chatGroup,
-		// setChatGroup,
-		// chatGroups,
 		setChatGroups,
 		socket,
 	} = useContext(ChatContext);
@@ -52,37 +49,8 @@ export default function ChatPage() {
 		};
 	}, [user]);
 
-	const sendMessage = () => {
-		// console.log("sent message");
-		if (input) {
-			socket.emit("chat_message", input);
-			setInput("");
-		}
-	};
-
-	const handleLogout = async () => {
-		try {
-	      await api.post("/api/logout");
-		} catch (err) {
-			console.error("Logout failed", err);
-		} finally {
-			setUser(null);
-			// Reset to login mode
-			setAuthMode("login");
-		}
-	};
-
 	return (
 		<div className="flex flex-col relative">
-			<div className="flex justify-end mb-2">
-				<button
-					type="button"
-					onClick={handleLogout}
-					className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded"
-				>
-					Logout
-				</button>
-			</div>
 			<ChatGroups />
 			<ul className="flex flex-col pl-25 pb-8">
 				{messages.map((msg) => (

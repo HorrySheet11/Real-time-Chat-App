@@ -1,10 +1,11 @@
 import { useContext, useState } from "react";
 import { ChatContext } from "../context/ChatContext";
+import api from "../services/axios";
 import { socket } from "../services/socket.js";
 
 export default function ChatBox() {
 	const [input, setInput] = useState("");
-	const { chatGroup,user } = useContext(ChatContext);
+	const { chatGroup, user, setUser, setAuthMode } = useContext(ChatContext);
 	const sendMessage = () => {
 		if (input) {
 			socket.emit("chat_message", { message: input, user: user });
@@ -12,9 +13,20 @@ export default function ChatBox() {
 		}
 		// console.log("sent message");
 	};
-	return (
-		<div className="bg-darkBg fixed inset-x-0 bottom-0 py-1 border-t flex-row">
 
+	const handleLogout = async () => {
+		try {
+			await api.post("/api/logout");
+		} catch (err) {
+			console.error("Logout failed", err);
+		} finally {
+			setUser(null);
+			// Reset to login mode
+			setAuthMode("login");
+		}
+	};
+	return (
+		<div className="bg-darkBg fixed inset-x-0 bottom-0 py-1 border-t flex-row ">
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
@@ -24,7 +36,7 @@ export default function ChatBox() {
 			>
 				{" "}
 				<h3 className="my-auto">{user?.username}</h3>
-				<h3 className="my-auto">in {chatGroup}</h3>
+				<h3 className="my-auto">{chatGroup && ` in ${chatGroup}`}</h3>
 				<div className="flex flex-row justify-center gap-1">
 					<input
 						className="rounded-sm border p-1"
@@ -40,6 +52,14 @@ export default function ChatBox() {
 					</button>
 				</div>
 			</form>
+
+			<button
+				type="button"
+				onClick={handleLogout}
+				className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded absolute bottom-1 right-2"
+			>
+				Logout
+			</button>
 		</div>
 	);
 }
