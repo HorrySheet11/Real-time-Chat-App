@@ -3,8 +3,8 @@ import { ChatContext } from "../context/ChatContext";
 import api from "../services/axios";
 
 export default function Login({ onAuthSuccess }) {
-	const [username, setUsername] = useState("testtt");
-	const [password, setPassword] = useState("testtt");
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 
