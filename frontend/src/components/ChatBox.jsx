@@ -22,7 +22,7 @@ export default function ChatBox() {
 				}}
 				className="flex flex-row items-center justify-between gap-2 2xs:gap-1 xs:gap-1.5 sm:gap-2 w-full"
 			>
-				<div className="flex flex-col items-start gap-0.5 2xs:gap-0.5">
+				<div className="flex flex-col items-start gap-0.5 2xs:gap-0.5 p-2">
 					<h3 className="text-xs 2xs:text-[10px] xs:text-sm sm:text-base font-medium text-white my-auto">{user?.username}</h3>
 					{chatGroup && <h3 className="text-xs 2xs:text-[10px] xs:text-sm sm:text-base text-white-400 my-auto">{` in ${chatGroup}`}</h3>}
 				</div>
