@@ -8,8 +8,15 @@
 }
 
 @theme{
-    --font-century-gothic: century-gothic, sans-serif; 
-  --color-darkBg: #16171d;
+    --font-century-gothic: century-gothic, sans-serif;
+    --color-darkBg: #16171d;
+    --screens-2xs: 240px;
+    --screens-xs: 320px;
+    --screens-sm: 480px;
+    --screens-md: 640px;
+    --screens-lg: 768px;
+    --screens-xl: 1024px;
+    --screens-2xl: 1280px;
 }
 
 :root {
@@ -106,4 +113,3 @@ h2 {
 p {
   margin: 0;
 }
-
