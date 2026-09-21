@@ -15,6 +15,18 @@ export default function ChatPage() {
 		socket,
 	} = useContext(ChatContext);
 
+	const handleLogout = async () => {
+		try {
+			await api.post("/api/logout");
+		} catch (err) {
+			console.error("Logout failed", err);
+		} finally {
+			setUser(null);
+			// Reset to login mode
+			setAuthMode("login");
+		}
+	};
+
 	useEffect(() => {
 		if (user) {
 			socket.connect();
@@ -50,33 +62,46 @@ export default function ChatPage() {
 	}, [user]);
 
 	return (
-		<div className="flex h-screen relative">
-			<ChatGroups className="w-64 border-r" />
-			<div className="flex-1 flex-col m-3">
-				<ul className="flex flex-col flex-1 overflow-y-auto pb-12">
-					{messages.map((msg) => (
-						<li key={msg._id} className="mb-4">
-							{msg.sender === user?.username ? (
-								<div className="flex justify-end">
-									<div className="bg-blue-500 text-white p-1 rounded-lg max-w-[70%]">
-										<p className="m-0">{msg.message}</p>
-									</div>
-								</div>
-							) : (
-								<div className="flex gap-0 justify-start">
-									<div className="bg-gray-600 text-white p-1 rounded-lg max-w-[70%]">
-										<div className="flex justify-between">
-											<small className="text-gray-200">{msg.sender}</small>
+		<div className="flex h-screen relative bg-darkBg">
+			{/* Chat Groups Drawer - shown as sidebar on md+ and as drawer on smaller screens */}
+			<ChatGroups />
+
+			<div className="flex-1 flex-col m-2 2xs:m-1 xs:m-2 sm:m-3 md:m-4">
+					{/* Header with logout button */}
+					<div className="flex justify-between items-center mb-2 2xs:mb-1 xs:mb-1.5 sm:mb-2">
+						<h2 className="text-xl 2xs:text-lg xs:text-xl sm:text-2xl font-bold">Horry Chat!</h2>
+						<button type="button"
+							onClick={handleLogout}
+							className="bg-red-500 hover:bg-red-600 text-white py-1 2xs:py-0.5 xs:py-0.5 sm:py-1 px-2 2xs:px-1.5 xs:px-2 sm:px-2.5 rounded"
+						>
+							Logout
+						</button>
+					</div>
+					<ul className="flex flex-col flex-1 overflow-y-auto pb-4 2xs:pb-2 xs:pb-3 sm:pb-4 md:pb-6">
+						{messages.map((msg) => (
+							<li key={msg._id} className="mb-4">
+								{msg.sender === user?.username ? (
+									<div className="flex justify-end">
+										<div className="bg-blue-500 text-white p-1 rounded-lg max-w-[70%]">
+											<p className="m-0">{msg.message}</p>
 										</div>
-										<p className="m-0">{msg.message}</p>
 									</div>
-								</div>
-							)}
-						</li>
-					))}
-				</ul>
-				<ChatBox />
+								) : (
+									<div className="flex gap-0 justify-start">
+										<div className="bg-gray-600 text-white p-1 rounded-lg max-w-[70%]">
+											<div className="flex justify-between">
+												<small className="text-gray-200">{msg.sender}</small>
+											</div>
+											<p className="m-0">{msg.message}</p>
+										</div>
+									</div>
+									)
+						}
+							</li>
+						))}
+					</ul>
+					<ChatBox />
+				</div>
 			</div>
-		</div>
-	);
-}
+		);
+	}
